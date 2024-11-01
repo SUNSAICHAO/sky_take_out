@@ -64,7 +64,7 @@ public class DishServiceImpl implements DishService {
     @Override
     public DishVO getById(long id) {
         Dish dish = dishMapper.getById(id);
-        List<DishFlavor> flavors = dishFlavorMapper.getById(id);
+        List<DishFlavor> flavors = dishFlavorMapper.getByDishId(id);
         DishVO dishVO = new DishVO();
         BeanUtils.copyProperties(dish, dishVO);
         dishVO.setFlavors(flavors);
@@ -81,9 +81,8 @@ public class DishServiceImpl implements DishService {
         /*更新菜品表*/
         dishMapper.update(dish);
         /*删除原来的菜品对应的口味*/
-        dishFlavorMapper.deleteById(id);
+        dishFlavorMapper.deleteByDishId(id);
         if (flavors.size()>0) {
-            System.out.println(flavors);
             for (DishFlavor flavor : flavors) {
                 flavor.setDishId(id);
             }
@@ -95,24 +94,19 @@ public class DishServiceImpl implements DishService {
     @Override
     public void deleteBatchByIds(List<Long> ids) {
         /*检查菜品是否启用*/
-        for (Long id : ids) {
-            System.out.println(id);
-        }
         List<Dish> dishes = dishMapper.getBatchOnSaleById(ids);
-        System.out.println(dishes);
         if (dishes.size() > 0) {
             throw new DeletionNotAllowedException(MessageConstant.DISH_ON_SALE);
         }
         /*检查所选中的菜品是否被套餐所关联*/
-        List<SetmealDish> setmealDishes = setmealDishMapper.getById(ids);
+        List<SetmealDish> setmealDishes = setmealDishMapper.getBatchByDishId(ids);
         if (setmealDishes.size() > 0) {
             throw new DeletionNotAllowedException(MessageConstant.DISH_BE_RELATED_BY_SETMEAL);
         }
-        /*批量删除菜品*//*批量删除口味*/
-        for (long id : ids) {
-            dishMapper.deleteById(id);
-            dishFlavorMapper.deleteById(id);
-        }
+        /*批量删除菜品*/
+        dishMapper.deleteBatchById(ids);
+        /*批量删除口味*/
+        dishFlavorMapper.deleteBatchByDishId(ids);
     }
 
     @Override
@@ -121,5 +115,11 @@ public class DishServiceImpl implements DishService {
         dish.setStatus(status);
         dish.setId(id);
         dishMapper.update(dish);
+    }
+
+    @Override
+    public List<Dish> getByCategoryId(long id) {
+        List<Dish> dishes = dishMapper.getByCategoryId(id);
+        return dishes;
     }
 }

@@ -24,6 +24,10 @@
         </set>
         where id=#{id}
     </update>
+    <delete id="deleteBatchById">
+        delete from dish where id in
+        <foreach collection="ids" item="id" open="(" separator="," close=")">#{id}</foreach>
+    </delete>
 
     <select id="pageQuery" resultType="com.sky.entity.Dish">
         select *from dish
