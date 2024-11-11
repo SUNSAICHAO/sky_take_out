@@ -1,5 +1,4 @@
 package com.sky.controller.admin;
-
 import com.sky.constant.JwtClaimsConstant;
 import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
@@ -16,7 +15,6 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,12 +26,10 @@ import java.util.Map;
 @Slf4j
 @Api(tags = "员工相关接口")
 public class EmployeeController {
-
     @Autowired
     private EmployeeService employeeService;
     @Autowired
     private JwtProperties jwtProperties;
-
     /**
      * 登录
      *
@@ -44,7 +40,6 @@ public class EmployeeController {
     @PostMapping("/login")
     public Result<EmployeeLoginVO> login(@RequestBody EmployeeLoginDTO employeeLoginDTO) {
         log.info("员工登录：{}", employeeLoginDTO);
-
         Employee employee = employeeService.login(employeeLoginDTO);
 
         //登录成功后，生成jwt令牌

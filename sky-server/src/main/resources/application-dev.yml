@@ -6,8 +6,15 @@ sky:
     database: sky_take_out
     username: root
     password: 123456
+  redis:
+    host: localhost
+    port: 6379
+    password: 123456
+    database: 0
+
   alioss:
     endpoint: oss-cn-beijing.aliyuncs.com
     access-key-id: LTAI5tMKBAiQdsX5bZvgT7KW
     access-key-secret: PUIpKczli0DMxEfWzKoDnEIwgKd47g
     bucket-name: sky-achao
+
