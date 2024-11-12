@@ -61,7 +61,7 @@ public class SetmealController {
     @GetMapping("/{id}")
     @ApiOperation(value = "根据id查询套餐")
     public Result<SetmealVO> getById(@PathVariable long id) {
-        SetmealVO setmealVO = setmealService.getById(id);
+        SetmealVO setmealVO = setmealService.getWithFishById(id);
         return Result.success(setmealVO);
     }
 }

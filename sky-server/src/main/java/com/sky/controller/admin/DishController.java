@@ -41,7 +41,7 @@ public class DishController {
     @GetMapping("/{id}")
     @ApiOperation("根据id查询菜品")
     public Result getById(@PathVariable long id) {
-        DishVO dishVO = dishService.getById(id);
+        DishVO dishVO = dishService.getWithFlavorById(id);
         return Result.success(dishVO);
     }
 
@@ -54,7 +54,7 @@ public class DishController {
 
     @DeleteMapping
     @ApiOperation(value = "批量删除菜品")
-    public Result deleteBatch(@RequestParam List<Long> ids) {
+    public Result deleteBatch(@RequestParam List<Long>ids) {
         dishService.deleteBatchByIds(ids);
         return Result.success();
     }

@@ -41,14 +41,14 @@ public class UserServiceImpl implements UserService {
         //如果是新用户，自动完成注册
         if (user == null) {
             User user1 = User.builder()
-                    .openid(user.getOpenid())
+                    .openid(openid)
                     .createTime(LocalDateTime.now())
                     .build();
-            userMapper.insert(user);
+            userMapper.insert(user1);
+            return user1;
         }
         //返回这个用户对象
         return user;
-
     }
 
     private String getOpenID(String code) {

@@ -15,6 +15,7 @@ import com.sky.mapper.SetmealDishMapper;
 import com.sky.mapper.SetmealMapper;
 import com.sky.result.PageResult;
 import com.sky.service.SetmealService;
+import com.sky.vo.DishItemVO;
 import com.sky.vo.SetmealVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -108,12 +109,33 @@ public class SetmealServiceImpl implements SetmealService {
     }
 
     @Override
-    public SetmealVO getById(long id) {
+    public SetmealVO getWithFishById(long id) {
         Setmeal setmeal = setmealMapper.getById(id);
         List<SetmealDish> setmealDishes = setmealDishMapper.getBySetmealId(id);
         SetmealVO setmealVO = new SetmealVO();
         BeanUtils.copyProperties(setmeal, setmealVO);
         setmealVO.setSetmealDishes(setmealDishes);
         return setmealVO;
+    }
+
+    @Override
+    public List<Setmeal> getByCategoryId(long categoryId) {
+        List<Setmeal> setmeals = setmealMapper.getByCategoryId(categoryId);
+        return setmeals;
+    }
+
+    @Override
+    public List<DishItemVO> getDishById(long id) {
+        List<SetmealDish> setmealDishes = setmealDishMapper.getBySetmealId(id);
+        ArrayList<DishItemVO> dishItemVOS = new ArrayList<>();
+        for (SetmealDish setmealDish : setmealDishes) {
+            Long dishId = setmealDish.getDishId();
+            Dish dish = dishMapper.getById(dishId);
+            DishItemVO dishItemVO = new DishItemVO();
+            BeanUtils.copyProperties(setmealDish, dishItemVO);
+            BeanUtils.copyProperties(dish, dishItemVO);
+            dishItemVOS.add(dishItemVO);
+        }
+        return dishItemVOS;
     }
 }

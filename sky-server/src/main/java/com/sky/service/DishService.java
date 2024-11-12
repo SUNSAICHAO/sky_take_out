@@ -15,7 +15,7 @@ public interface DishService {
 
     PageResult pageQuery(DishPageQueryDTO dishPageQueryDTO);
 
-    DishVO getById(long id);
+    DishVO getWithFlavorById(long id);
 
     void updateWithFlavor(DishDTO dishDTO);
 
@@ -24,4 +24,6 @@ public interface DishService {
     void startOrStop(Integer status, long id);
 
     List<Dish> getByCategoryId(long id);
+
+    List<DishVO> getWithFlavorByCategoryId(long categoryId);
 }

@@ -10,7 +10,7 @@ import java.util.List;
 @Mapper
 public interface SetmealDishMapper {
     /*根据菜品id集合批量查找套餐中的菜品*/
-    List<SetmealDish>getBatchByDishId(List<Long>list);
+    List<SetmealDish>getBatchByDishId(List<Long>ids);
 
     void insertBatch(List<SetmealDish> setmealDishes);
     @Delete("delete from setmeal_dish where setmeal_id =#{id}")

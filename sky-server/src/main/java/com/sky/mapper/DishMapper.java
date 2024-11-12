@@ -43,4 +43,5 @@ public interface DishMapper {
 
     @Select("select * from dish where category_id = #{id}")
     List<Dish> getByCategoryId(long id);
+
 }

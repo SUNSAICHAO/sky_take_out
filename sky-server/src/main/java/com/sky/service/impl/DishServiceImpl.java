@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -62,7 +63,7 @@ public class DishServiceImpl implements DishService {
     }
 
     @Override
-    public DishVO getById(long id) {
+    public DishVO getWithFlavorById(long id) {
         Dish dish = dishMapper.getById(id);
         List<DishFlavor> flavors = dishFlavorMapper.getByDishId(id);
         DishVO dishVO = new DishVO();
@@ -98,6 +99,7 @@ public class DishServiceImpl implements DishService {
         if (dishes.size() > 0) {
             throw new DeletionNotAllowedException(MessageConstant.DISH_ON_SALE);
         }
+        System.out.println(ids);
         /*检查所选中的菜品是否被套餐所关联*/
         List<SetmealDish> setmealDishes = setmealDishMapper.getBatchByDishId(ids);
         if (setmealDishes.size() > 0) {
@@ -121,5 +123,17 @@ public class DishServiceImpl implements DishService {
     public List<Dish> getByCategoryId(long id) {
         List<Dish> dishes = dishMapper.getByCategoryId(id);
         return dishes;
+    }
+
+    @Override
+    public List<DishVO> getWithFlavorByCategoryId(long categoryId) {
+        List<Dish> dishes = dishMapper.getByCategoryId(categoryId);
+        List<DishVO> dishVOS = new ArrayList<>();
+        for (Dish dish : dishes) {
+            Long Id = dish.getId();
+            DishVO dishVO = getWithFlavorById(Id);
+            dishVOS.add(dishVO);
+        }
+        return dishVOS;
     }
 }

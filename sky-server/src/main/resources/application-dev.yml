@@ -17,4 +17,7 @@ sky:
     access-key-id: LTAI5tMKBAiQdsX5bZvgT7KW
     access-key-secret: PUIpKczli0DMxEfWzKoDnEIwgKd47g
     bucket-name: sky-achao
+  wechat:
+    appid: wx76a4973cde45a0df
+    secret: 90b85caf7338910878f9df1b367d85fa
 
