@@ -22,7 +22,7 @@ public interface DishMapper {
     Dish getById(long id);
 
 
-    List<Dish> getBatchOnSaleById(List<Long>ids);
+    List<Dish> getBatchById(List<Long>ids);
 
     @AutoFill(OperationType.UPDATE)
     void update(Dish dish);

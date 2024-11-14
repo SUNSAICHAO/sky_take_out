@@ -6,6 +6,8 @@ import com.sky.entity.Orders;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
+import java.awt.*;
+
 @Mapper
 public interface OrderMapper {
 
@@ -13,4 +15,6 @@ public interface OrderMapper {
 
     @Select("select * from orders where id =#{id}")
     Orders getById(long id);
+
+    void insert(Orders orders);
 }

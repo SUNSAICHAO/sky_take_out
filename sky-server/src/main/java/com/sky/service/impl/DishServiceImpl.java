@@ -3,6 +3,7 @@ package com.sky.service.impl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.sky.constant.MessageConstant;
+import com.sky.constant.StatusConstant;
 import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
 import com.sky.entity.Dish;
@@ -95,11 +96,12 @@ public class DishServiceImpl implements DishService {
     @Override
     public void deleteBatchByIds(List<Long> ids) {
         /*检查菜品是否启用*/
-        List<Dish> dishes = dishMapper.getBatchOnSaleById(ids);
-        if (dishes.size() > 0) {
-            throw new DeletionNotAllowedException(MessageConstant.DISH_ON_SALE);
+        List<Dish> dishes = dishMapper.getBatchById(ids);
+        for (Dish dish : dishes) {
+            if (dish.getStatus()== StatusConstant.ENABLE){
+                throw new DeletionNotAllowedException(MessageConstant.DISH_ON_SALE);
+            }
         }
-        System.out.println(ids);
         /*检查所选中的菜品是否被套餐所关联*/
         List<SetmealDish> setmealDishes = setmealDishMapper.getBatchByDishId(ids);
         if (setmealDishes.size() > 0) {

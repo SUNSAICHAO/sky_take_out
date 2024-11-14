@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
+@RestController("adminOrderController")
 @RequestMapping("/admin/order")
 @Slf4j
 @Api(tags ="订单管理接口")

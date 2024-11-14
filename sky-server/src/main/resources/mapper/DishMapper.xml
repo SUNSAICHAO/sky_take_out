@@ -38,11 +38,10 @@
         </where>
         order by create_time desc
     </select>
-    <select id="getBatchOnSaleById" resultType="com.sky.entity.Dish">
+    <select id="getBatchById" resultType="com.sky.entity.Dish">
         select *
         from dish
         where id in
         <foreach collection="ids" item="id" open="(" separator="," close=")">#{id}</foreach>
-        and status=1
     </select>
 </mapper>
