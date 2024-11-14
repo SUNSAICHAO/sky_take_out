@@ -7,6 +7,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,10 +21,18 @@ import java.util.List;
 public class DishController {
     @Autowired
     private DishService dishService;
+    @Autowired
+    private RedisTemplate redisTemplate;
+
     @GetMapping("/list")
     @ApiOperation(value = "根据分类ID查询菜品")
     public Result getWithFlavorByCategoryId(long categoryId) {
-        List<DishVO> dishVOS = dishService.getWithFlavorByCategoryId(categoryId);
+        String key = "dish_" + categoryId;
+        List<DishVO> dishVOS = (List<DishVO>) redisTemplate.opsForValue().get(key);
+        if (dishVOS==null){
+            dishVOS = dishService.getWithFlavorByCategoryId(categoryId);
+            redisTemplate.opsForValue().set(key, dishVOS);
+        }
         return Result.success(dishVOS);
     }
 }

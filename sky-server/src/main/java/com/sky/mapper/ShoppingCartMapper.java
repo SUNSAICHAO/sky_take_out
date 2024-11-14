@@ -1,6 +1,4 @@
 package com.sky.mapper;
-
-import com.sky.dto.ShoppingCartDTO;
 import com.sky.entity.ShoppingCart;
 import org.apache.ibatis.annotations.*;
 
@@ -8,10 +6,8 @@ import java.util.List;
 
 @Mapper
 public interface ShoppingCartMapper {
-    @Select("select * from shopping_cart")
-    List<ShoppingCart> list();
 
-    ShoppingCart get(ShoppingCartDTO shoppingCartDTO);
+    List<ShoppingCart> list(ShoppingCart shoppingCart);
 
     void update(ShoppingCart shoppingCart);
 
@@ -19,7 +15,7 @@ public interface ShoppingCartMapper {
             " VALUES(#{name},#{image},#{userId},#{setmealId},#{dishId},#{dishFlavor},#{amount},#{createTime}) ")
     void add(ShoppingCart shoppingCart);
 
-    void delete(ShoppingCartDTO shoppingCartDTO);
+    void delete(ShoppingCart shoppingCart);
 
     @Delete("delete from shopping_cart where user_id = #{userId}")
     void clean(long userId);

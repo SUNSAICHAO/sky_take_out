@@ -3,11 +3,12 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.sky.mapper.ShoppingCartMapper">
     <update id="update">
-        update shopping_cart set number=#{number},amount=#{amount},create_time=#{createTime}
+        update shopping_cart set number=#{number},create_time=#{createTime}
         <where>
             <if test="setmealId!=null">and setmeal_id=#{setmealId}</if>
             <if test="dishId!=null">and dish_id=#{dishId}</if>
             <if test="dishFlavor!=null">and dish_flavor=#{dishFlavor}</if>
+            <if test="userId!=null">and user_id=#{userId}</if>
         </where>
     </update>
     <delete id="delete">
@@ -16,16 +17,18 @@
             <if test="setmealId!=null">and setmeal_id=#{setmealId}</if>
             <if test="dishId!=null">and dish_id=#{dishId}</if>
             <if test="dishFlavor!=null">and dish_flavor=#{dishFlavor}</if>
+            <if test="userId!=null">and user_id=#{userId}</if>
         </where>
 
     </delete>
 
-    <select id="get" resultType="com.sky.entity.ShoppingCart">
+    <select id="list" resultType="com.sky.entity.ShoppingCart">
         select * from shopping_cart
         <where>
             <if test="setmealId!=null">and setmeal_id=#{setmealId}</if>
             <if test="dishId!=null">and dish_id=#{dishId}</if>
             <if test="dishFlavor!=null">and dish_flavor=#{dishFlavor}</if>
+            <if test="userId!=null">and user_id=#{userId}</if>
         </where>
     </select>
 </mapper>
