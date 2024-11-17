@@ -5,6 +5,8 @@ import com.sky.entity.Orders;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.core.annotation.Order;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -17,6 +19,6 @@ public class OrderVO extends Orders implements Serializable {
     private String orderDishes;
 
     //订单详情
-    private List<OrderDetail> orderDetailList;
+    private List<OrderDetail>orderDetailList ;
 
 }

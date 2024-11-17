@@ -73,8 +73,9 @@ public class SetmealServiceImpl implements SetmealService {
             }
             List<Dish> dishes = dishMapper.getBatchById(ids);
             for (Dish dish : dishes) {
-                if (dish.getStatus()==StatusConstant.DISABLE);
-                throw new SetmealEnableFailedException(MessageConstant.SETMEAL_ENABLE_FAILED);
+                if (dish.getStatus()==StatusConstant.DISABLE){
+                    throw new SetmealEnableFailedException(MessageConstant.SETMEAL_ENABLE_FAILED);
+                }
             }
         }
         Setmeal setmeal = new Setmeal();

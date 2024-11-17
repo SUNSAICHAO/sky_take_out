@@ -1,8 +1,8 @@
 package com.sky.controller.user;
 
-import com.sky.dto.OrdersDTO;
 import com.sky.dto.OrdersPaymentDTO;
 import com.sky.dto.OrdersSubmitDTO;
+import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.OrderService;
 import com.sky.vo.OrderPaymentVO;
@@ -21,9 +21,10 @@ import org.springframework.web.bind.annotation.*;
 public class OrderController {
     @Autowired
     private OrderService orderService;
+
     @PostMapping("/submit")
     @ApiOperation(value = "用户下单")
-    public Result<OrderSubmitVO> submit(@RequestBody OrdersSubmitDTO ordersSubmitDTO ){
+    public Result<OrderSubmitVO> submit(@RequestBody OrdersSubmitDTO ordersSubmitDTO) {
         log.info("用户下单，下单信息为:{}", ordersSubmitDTO);
         OrderSubmitVO submit = orderService.submit(ordersSubmitDTO);
         return Result.success(submit);
@@ -43,7 +44,39 @@ public class OrderController {
         log.info("生成预支付交易单：{}", orderPaymentVO);
         return Result.success(orderPaymentVO);
     }
+    @PostMapping("/repetition/{id}")
+    @ApiOperation(value = "再来一单")
+    public Result repetition(@PathVariable long id) {
+        orderService.repetition(id);
+        return Result.success();
+    }
 
+    @GetMapping("/reminder/{id}")
+    @ApiOperation(value = "催单")
+    public Result reminder(@PathVariable long id) {
+        orderService.reminder(id);
+        return Result.success();
+    }
 
+    @PutMapping("/cancel/{id}")
+    @ApiOperation("取消订单")
+    public Result cancel(@PathVariable long id) throws Exception {
+        orderService.userCancel(id);
+        return Result.success();
+    }
+
+    @GetMapping("/details/{id}")
+    @ApiOperation(value = "查询订单详情")
+    public Result<OrderVO> getDetails(@PathVariable long id) {
+        OrderVO orderVO = orderService.UserGetDetailsById(id);
+        return Result.success(orderVO);
+    }
+
+    @GetMapping("historyOrders")
+    @ApiOperation(value = "历史订单查询")
+    public Result<PageResult>page(Integer page,Integer pageSize,Integer status){
+        PageResult pageResult = orderService.pageQuery(page, pageSize, status);
+        return Result.success(pageResult);
+    }
 
 }
