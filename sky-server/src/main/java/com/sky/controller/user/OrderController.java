@@ -44,17 +44,21 @@ public class OrderController {
         log.info("生成预支付交易单：{}", orderPaymentVO);
         return Result.success(orderPaymentVO);
     }
+
+    @RequestMapping("reminder/{id}")
+    @ApiOperation(value = "用户催单")
+    public Result remind(@PathVariable long id){
+        log.info("用户催单，订单号：{}", id);
+        orderService.remind(id);
+        return Result.success();
+
+    }
+
+
     @PostMapping("/repetition/{id}")
     @ApiOperation(value = "再来一单")
     public Result repetition(@PathVariable long id) {
         orderService.repetition(id);
-        return Result.success();
-    }
-
-    @GetMapping("/reminder/{id}")
-    @ApiOperation(value = "催单")
-    public Result reminder(@PathVariable long id) {
-        orderService.reminder(id);
         return Result.success();
     }
 

@@ -17,7 +17,7 @@ public class OrderTask {
     private OrderMapper orderMapper;
 
     //处理超时订单,每分钟触发一次
-    @Scheduled(cron = "0 * * * * ?")
+    @Scheduled(cron = "0 0 1 * * ?")
     public void ProcessOutTimeOrder() {
         log.info("{}:开始处理超时未支付订单", LocalDateTime.now());
         Integer status = Orders.PENDING_PAYMENT;

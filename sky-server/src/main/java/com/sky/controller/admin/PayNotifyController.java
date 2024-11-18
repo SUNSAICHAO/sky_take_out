@@ -11,11 +11,13 @@ import org.apache.http.entity.ContentType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 支付回调相关接口
@@ -103,9 +105,10 @@ public class PayNotifyController {
 
     /**
      * 给微信响应
+     *
      * @param response
      */
-    private void responseToWeixin(HttpServletResponse response) throws Exception{
+    private void responseToWeixin(HttpServletResponse response) throws Exception {
         response.setStatus(200);
         HashMap<Object, Object> map = new HashMap<>();
         map.put("code", "SUCCESS");

@@ -22,7 +22,6 @@ public interface OrderService {
 
     void repetition(long id);
 
-    void reminder(long id);
 
     void userCancel(long id) throws Exception;
     void adminCancel(OrdersCancelDTO ordersCancelDTO) throws Exception;
@@ -33,4 +32,6 @@ public interface OrderService {
     void rejection(OrdersRejectionDTO ordersRejectionDTO) throws Exception;
     void complete(long id);
     void delivery(long id);
+
+    void remind(long id);
 }

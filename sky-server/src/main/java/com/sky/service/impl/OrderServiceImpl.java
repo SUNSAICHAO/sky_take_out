@@ -1,5 +1,6 @@
 package com.sky.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -18,6 +19,7 @@ import com.sky.vo.OrderPaymentVO;
 import com.sky.vo.OrderStatisticsVO;
 import com.sky.vo.OrderSubmitVO;
 import com.sky.vo.OrderVO;
+import com.sky.websocket.WebSocketServer;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,9 +28,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.StringJoiner;
+import java.util.*;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -44,6 +44,8 @@ public class OrderServiceImpl implements OrderService {
     private UserMapper userMapper;
     @Autowired
     private WeChatPayUtil weChatPayUtil;
+    @Autowired
+    private WebSocketServer webSocketServer;
 
     //用户端查询历史订单
     @Override
@@ -148,6 +150,8 @@ public class OrderServiceImpl implements OrderService {
         orderDetailMapper.insertBatch(orderDetails);
         // 清空当前用户的购物车数据
         shoppingCartMapper.clean(BaseContext.getCurrentId());
+        //更新支付状态为已支付，订单状态为待接单，并提醒商家接单
+        paySuccess(orders.getNumber());
         //返回前端需要的VO对象
         OrderSubmitVO orderSubmitVO = new OrderSubmitVO();
         orderSubmitVO.setId(orders.getId());
@@ -206,12 +210,12 @@ public class OrderServiceImpl implements OrderService {
                 .checkoutTime(LocalDateTime.now())
                 .build();
         orderMapper.update(orders);
-    }
-
-
-    @Override
-    public void reminder(long id) {
-
+        Map map = new HashMap<>();
+        map.put("type",1 );
+        map.put("orderId", ordersDB.getId());
+        map.put("content", "订单号:"+outTradeNo);
+        String message = JSON.toJSONString(map);
+        webSocketServer.sendToAllClient(message);
     }
 
     @Override
@@ -325,6 +329,23 @@ public class OrderServiceImpl implements OrderService {
                 .status(Orders.DELIVERY_IN_PROGRESS)
                 .build();
         orderMapper.update(orders);
+    }
+
+    @Override
+    public void remind(long id) {
+        Orders orders = orderMapper.getById(id);
+        if (orders==null){
+            throw new OrderBusinessException(MessageConstant.ORDER_NOT_FOUND);
+        }
+        if (orders.getStatus().equals(Orders.DELIVERY_IN_PROGRESS)){
+            throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+        }
+        Map map = new HashMap<>();
+        map.put("type",2 );
+        map.put("orderId", orders.getId());
+        map.put("content", "订单号:"+ orders.getNumber());
+        String message = JSON.toJSONString(map);
+        webSocketServer.sendToAllClient(message);
     }
 
     @Override

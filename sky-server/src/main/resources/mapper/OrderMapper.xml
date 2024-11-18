@@ -59,4 +59,14 @@
         order by order_time desc
     </select>
 
+    <select id="sumByBeginAndEnd" resultType="com.sky.entity.DayStatistics">
+        select date(order_time) date, sum(amount) statistics
+        from orders
+        where date(order_time) between #{begin} and #{end}
+        and status=5
+        group by date(order_time)
+        order by date (order_time)
+        desc
+    </select>
+
 </mapper>
