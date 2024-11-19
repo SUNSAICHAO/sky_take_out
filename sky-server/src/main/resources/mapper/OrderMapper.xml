@@ -58,15 +58,22 @@
         </where>
         order by order_time desc
     </select>
-
-    <select id="sumByBeginAndEnd" resultType="com.sky.entity.DayStatistics">
-        select date(order_time) date, sum(amount) statistics
-        from orders
-        where date(order_time) between #{begin} and #{end}
-        and status=5
-        group by date(order_time)
-        order by date (order_time)
-        desc
+    <select id="countByMap" resultType="java.lang.Integer">
+        select count(id) from orders
+        <where>
+            <if test="date!=null">and DATE(order_time)=#{date}</if>
+            <if test="status!=null">and status=#{status}</if>
+        </where>
     </select>
-
+    <select id="getGoodsSalesTop10" resultType="com.sky.dto.GoodsSalesDTO">
+        select name, sum(od.number) number
+        from orders o,
+             order_detail od
+        where o.id = od.order_id
+          and DATE(order_time) between #{begin} and #{end}
+          and status = 5
+        group by name
+        order by number desc
+        limit 0,10
+    </select>
 </mapper>

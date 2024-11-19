@@ -29,6 +29,8 @@ import org.springframework.util.CollectionUtils;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -366,14 +368,17 @@ public class OrderServiceImpl implements OrderService {
     public void repetition(long id) {
         List<OrderDetail> details = orderDetailMapper.getByOrderId(id);
         if (details != null && !details.isEmpty()) {
-            details.stream().map(detail -> {
+            List<ShoppingCart> cartList = details.stream().map(detail -> {
                 ShoppingCart cart = new ShoppingCart();
                 BeanUtils.copyProperties(detail, cart, "id");
                 cart.setUserId(BaseContext.getCurrentId());
                 cart.setCreateTime(LocalDateTime.now());
-                shoppingCartMapper.add(cart);
                 return cart;
-            });
+            }).collect(Collectors.toList());
+            for (ShoppingCart shoppingCart : cartList) {
+                shoppingCartMapper.add(shoppingCart);
+            }
+
         }
     }
 
